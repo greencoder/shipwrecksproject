@@ -1,0 +1,23 @@
+To check the Postgis version from the client:
+# SELECT PostGIS_full_version();
+
+To create the spatial extension in the client:
+# CREATE EXTENSION postgis;
+
+To create a spatial database template on Ubuntu:
+https://docs.djangoproject.com/en/1.8/_downloads/create_template_postgis-debian.sh
+
+To create a spatial database on the Mac with Postgres.app:
+$ POSTGIS_SQL_PATH=/Applications/Postgres.app/Contents/Versions/9.4/share/postgresql/contrib/postgis-2.1
+$ POSTGIS_SQL_FILE=$POSTGIS_SQL_PATH/postgis.sql
+$ createdb -E UTF8 template_postgis # Create the template spatial database.
+$ createlang -d template_postgis plpgsql # Adding PLPGSQL language support.
+$ psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='template_postgis';"
+$ psql -d template_postgis -f $POSTGIS_SQL_FILE # Loading the PostGIS SQL routines
+$ psql -d template_postgis -f $POSTGIS_SQL_PATH/spatial_ref_sys.sql
+$ psql -d template_postgis -c "GRANT ALL ON geometry_columns TO PUBLIC;" # Enabling users to alter spatial tables.
+$ psql -d template_postgis -c "GRANT ALL ON geography_columns TO PUBLIC;"
+$ psql -d template_postgis -c "GRANT ALL ON spatial_ref_sys TO PUBLIC;"
+
+To create the database from the spatial template:
+$ createdb -T template_postgis <database name>
