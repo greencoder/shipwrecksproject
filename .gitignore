@@ -55,3 +55,6 @@ docs/_build/
 
 # PyBuilder
 target/
+
+static/*
+shipwrecks/settings_secret.py
